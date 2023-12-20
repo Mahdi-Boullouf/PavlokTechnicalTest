@@ -54,7 +54,8 @@ class SignInScreen extends StatelessWidget {
                 ),
                 22.verticalSpace,
                 FilledButton(
-                    onPressed: () {},
+                    onPressed: () =>
+                        Navigator.pushNamed(context, AppRoutes.home),
                     child: Text(
                       'Sign In',
                       style: TextStyle(color: Colors.white),

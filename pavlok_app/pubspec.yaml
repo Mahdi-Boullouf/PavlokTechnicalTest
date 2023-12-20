@@ -38,6 +38,7 @@ dependencies:
   dio: ^5.4.0
   flutter_screenutil: ^5.9.0
   workmanager: ^0.5.2
+  cached_network_image: ^3.3.0
 
 dev_dependencies:
   flutter_test:
