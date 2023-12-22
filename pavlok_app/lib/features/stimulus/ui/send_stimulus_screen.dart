@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pavlok_app/core/extensions/context_extension.dart';
 import 'package:pavlok_app/core/res/app_colors.dart';
-import 'package:pavlok_app/core/ui/components/stimulus_icon.dart';
+import 'package:pavlok_app/core/ui/components/loading_widget.dart';
+import 'package:pavlok_app/features/home/cubit/stimulus_cubit.dart';
+import 'package:pavlok_app/features/stimulus/cubit/send_stimulus_cubit.dart';
+import 'package:pavlok_app/features/stimulus/ui/stimulus_tile.dart';
+import 'package:pavlok_app/core/utils/utils.dart';
 
+import '../../../main.dart';
 class SendStimulusScreen extends StatefulWidget {
   const SendStimulusScreen({super.key});
 
@@ -12,14 +18,41 @@ class SendStimulusScreen extends StatefulWidget {
 }
 
 class _SendStimulusScreenState extends State<SendStimulusScreen> {
-  int selectedOption = 1;
+  int selectedOption = 0;
+  double value = 20;
+  final stimulusTypes = ['beep','zap','vibe'];
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      bottomNavigationBar: Container(
+      bottomNavigationBar:Container(
         color: AppColors.whiteColor,
+
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-        child: FilledButton(onPressed: () {}, child: Text('Send')),
+        child: BlocConsumer<SendStimulusCubit, SendStimulusState>(
+          listener: (context, state) {
+
+            if(state is SendStimulusError){
+              Utils.showFlushBar(context, state.errorMessage);
+            }else if (state is SendStimulusSuccess){
+              Utils.showFlushBar(context, 'Stimulus has sent succesfuly .');
+            }
+          },
+          builder: (context, state) {
+            if(state is SendStimulusLoading){
+              return  const FilledButton(onPressed: null, child: CircularProgressIndicator(color: Colors.white,));
+            }
+
+                       return FilledButton(onPressed: (){
+
+                         BlocProvider.of<SendStimulusCubit>(context).sendStimulus(stimulusTypes[selectedOption], value.toInt(), 'Just for testing');
+                         BlocProvider.of<StimulusCubit>(context).getStimulus(user.token!);
+                         }, child: const Text('Send'));
+
+
+          },
+        ),
+        // child:
       ),
       appBar: AppBar(
         centerTitle: true,
@@ -34,40 +67,31 @@ class _SendStimulusScreenState extends State<SendStimulusScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            ListTile(
-              leading: StimulusIcon(),
-              tileColor: AppColors.primaryColor,
-              shape: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none),
-              contentPadding: EdgeInsets.symmetric(vertical: 7.h),
-              title: Text(
-                'Beep',
-                style: context.textTheme.bodyMedium!
-                    .copyWith(color: AppColors.whiteColor),
-              ),
-            ),
-            8.verticalSpace,
-            ListTile(
-              leading: StimulusIcon(),
-              shape: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none),
-              contentPadding: EdgeInsets.symmetric(vertical: 7.h),
-              title: Text('Zap', style: context.textTheme.bodyMedium),
-            ),
-            8.verticalSpace,
-            ListTile(
-              leading: StimulusIcon(),
-              shape: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none),
-              contentPadding: EdgeInsets.symmetric(vertical: 7.h),
-              title: Text('Vibe', style: context.textTheme.bodyMedium),
-            ),
+           ListView.builder(itemCount: stimulusTypes.length,itemBuilder: (context, index) => Container(margin: EdgeInsets.only(bottom: 8.h), child: GestureDetector(onTap: () {
+             setState(() {
+               selectedOption = index;
+             });
+           }, child: StimulusTile(isSelected: index == selectedOption, stimulusType: stimulusTypes[index]))),shrinkWrap: true,physics: const NeverScrollableScrollPhysics(),)
+            ,22.verticalSpace,
+            const Text('Value'),
+
+            Row(
+              children: [
+                Expanded(
+                  child: Slider(value: value,max:100,activeColor: AppColors.primaryColor, onChanged: (value) {
+
+                    setState(() {
+                      this.value = value ;
+                    });
+                  },),
+                ),
+                Center(child: Text('${value.toInt()}%')),
+              ],
+            )
           ],
         ),
       )),
     );
   }
+
 }

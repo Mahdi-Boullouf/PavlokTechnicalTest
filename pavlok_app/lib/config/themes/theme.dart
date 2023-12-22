@@ -6,6 +6,7 @@ import 'package:pavlok_app/core/res/app_strings.dart';
 ThemeData appTheme() {
   return ThemeData(
       useMaterial3: true,
+
       filledButtonTheme: FilledButtonThemeData(
           style: ButtonStyle(
               backgroundColor: MaterialStatePropertyAll(AppColors.primaryColor),

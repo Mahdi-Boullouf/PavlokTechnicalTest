@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pavlok_app/core/app/app.dart';
 
 import 'package:pavlok_app/main.dart';
 

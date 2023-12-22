@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pavlok_app/core/extensions/context_extension.dart';
 import 'package:pavlok_app/core/ui/components/stimulus_icon.dart';
 
+import '../../../features/stimulus/models/stimulus.dart';
 import '../../res/app_colors.dart';
 
-class StimulsHistoryCard extends StatelessWidget {
-  const StimulsHistoryCard({super.key});
+class StimulusHistoryCard extends StatelessWidget {
+  const StimulusHistoryCard({super.key, required this.stimulus});
+final Stimulus stimulus;
+String getFormattedDate(){
+  DateTime dateTime = DateTime.parse(stimulus.createdAt!);
+  return DateFormat().format(dateTime);
 
+}
   @override
   Widget build(BuildContext context) {
+
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 0),
-      leading: StimulusIcon(),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+      leading: const StimulusIcon(),
       title: Text(
-        'Beep',
+        stimulus.type!.toUpperCase(),
         style: context.textTheme.bodyMedium,
       ),
       subtitle: Text(
-        '21 December , 2023',
+       getFormattedDate(),
         style: context.textTheme.bodySmall!
             .copyWith(color: AppColors.secondaryTextColor),
       ),
