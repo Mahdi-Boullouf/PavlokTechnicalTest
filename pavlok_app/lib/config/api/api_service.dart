@@ -15,22 +15,28 @@ class ApiService {
           ),
         );
 
-  Future<dynamic> get(String endpoint) async {
+  Future<dynamic> get(String endpoint,{Map<String,dynamic>? headers}) async {
     try {
-      final response = await _dio.get(endpoint);
+      final response = await _dio.get(endpoint,options:Options(headers: headers) );
       return response.data;
     } catch (e) {
       _handleError(e);
     }
   }
 
-  Future<dynamic> post(String endpoint, dynamic data) async {
+  Future<dynamic> post(String endpoint, dynamic data,{Map<String,dynamic>? headers}) async {
     try {
       final response = await _dio.post(
         endpoint,
         data: data,
+        options:Options(headers: headers)
       );
+
+
       return response.data;
+
+
+
     } catch (e) {
       _handleError(e);
     }
@@ -50,10 +56,17 @@ class ApiService {
 
   void _handleError(error) {
     // Handle error based on your requirements
-    if (error is SocketException) {
-      throw InternetExceptionFailure();
-    } else if (error is FormatException) {
-      throw ServerExceptionFailure();
-    }
+
+
+  if(error.type == DioExceptionType.connectionError){
+    throw InternetExceptionFailure();
+  }else if (error.type == DioExceptionType.badResponse){
+    throw BadResponseFailure( message :error.response!.data['errors'][0]);
+
+  } else if(error.type == DioExceptionType.connectionTimeout ){
+
   }
-}
+
+
+  }}
+
