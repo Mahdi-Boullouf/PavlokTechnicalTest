@@ -32,7 +32,7 @@ class RestorePasswordScreen extends StatelessWidget {
           child: BlocConsumer<RestorePasswordCubit,RestorePasswordState>(
              listener:(context, state){
                 if(state is RestorePasswordError){
-                   Utils.showFlushbar(context,state.errorMessage);
+                   Utils.showFlushBar(context,state.errorMessage);
                 }
              },
              builder: (context, state){
