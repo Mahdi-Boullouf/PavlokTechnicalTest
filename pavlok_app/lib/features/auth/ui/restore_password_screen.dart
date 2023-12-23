@@ -9,6 +9,7 @@ import 'package:pavlok_app/core/ui/components/loading_widget.dart';
 import 'package:pavlok_app/features/auth/cubit/restore_password_cubit.dart';
 import 'package:pavlok_app/features/auth/repository/user_repository.dart';
 
+import 'package:pavlok_app/core/utils/utils.dart';
 import '../../../core/ui/input/input_field.dart';
 
 class RestorePasswordScreen extends StatelessWidget {
@@ -28,7 +29,13 @@ class RestorePasswordScreen extends StatelessWidget {
 
         child: Padding(
           padding:  EdgeInsets.symmetric(horizontal: 16.w),
-          child: BlocBuilder<RestorePasswordCubit,RestorePasswordState>(builder: (context, state){
+          child: BlocConsumer<RestorePasswordCubit,RestorePasswordState>(
+             listener:(context, state){
+                if(state is RestorePasswordError){
+                   Utils.showFlushbar(context,state.errorMessage);
+                }
+             },
+             builder: (context, state){
 
             if(state is RestorePasswordEmailSentSuccess){
               return resetPasswordEmailSentWidgets(context);
