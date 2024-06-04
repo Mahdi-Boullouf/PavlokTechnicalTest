@@ -1,6 +1,5 @@
-Project Name
-Overview
-This project was developed as part of a technical test for a Flutter developer role at Pavlok, a company known for its innovative behavior-changing devices.
+
+This project was developed as part of a technical test for a Flutter developer role at Pavlok, a USA-BASED company known for its innovative behavior-changing devices.
 
 Project Story
 The journey of this project began when a Flutter developer role opened up at Pavlok. A friend of mine, aware of my skills and experience, recommended me for the position. I promptly sent in my CV and portfolio, and was thrilled to be accepted in the initial phase.
